@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration Guide - QueryForge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>⚙️ Configuration Guide</h1>
+        <p>Complete Setup and Configuration Reference</p>
+    </header>
+
+    <nav class="breadcrumb">
+        <a href="index.html">Home</a> → Configuration Guide
+    </nav>
+
+    <div class="container">
+        <section class="doc-section">
+            <h2>Environment Variables</h2>
+            
+            <div class="config-block">
+                <h3>Frontend Configuration (.env)</h3>
+                <p>Located in project root. All variables must be prefixed with <code>VITE_</code>.</p>
+                <pre><code># Application Branding
+VITE_APP_NAME=QueryForge
+VITE_APP_SHORT_NAME=DB Client
+VITE_APP_LOGO=🗄️
+
+# Backend API
+VITE_API_URL=http://localhost:3002
+
+# Session Timeouts (milliseconds)
+VITE_INACTIVITY_TIMEOUT=300000    # 5 minutes
+VITE_MAX_SESSION_AGE=3600000      # 60 minutes</code></pre>
+                
+                <div class="info">
+                    <strong>Note:</strong> Changes to .env require frontend restart (<code>npm run dev</code>).
+                </div>
+            </div>
+
+            <div class="config-block">
+                <h3>Backend Configuration (.env.server)</h3>
+                <p>Located in project root. Contains server-side configuration.</p>
+                <pre><code># Server Configuration
+PORT=3002
+NODE_ENV=development
+
+# Session Secret (CHANGE IN PRODUCTION!)
+SESSION_SECRET=your-super-secret-session-key-change-this-in-production
+
+# Session Timeouts (milliseconds)
+INACTIVITY_TIMEOUT=300000         # 5 minutes
+MAX_SESSION_AGE=3600000           # 60 minutes
+
+# CORS Configuration
+FRONTEND_URL=http://localhost:5173
+
+# Optional: Redis Session Store (for production)
+# REDIS_URL=redis://localhost:6379
+# REDIS_PASSWORD=your-redis-password</code></pre>
+                
+                <div class="warning">
+                    <strong>Security Warning:</strong> Always change SESSION_SECRET in production! Use a strong random string (32+ characters).
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>SAML Configuration</h2>
+            
+            <div class="config-block">
+                <h3>saml-config.json</h3>
+                <p>SAML Identity Provider configuration.</p>
+                <pre><code>{
+  "entryPoint": "https://your-idp.example.com/sso/saml",
+  "issuer": "your-app-name",
+  "callbackUrl": "http://localhost:3002/api/auth/saml/callback",
+  "cert": "YOUR_IDP_CERTIFICATE_HERE",
+  "identifierFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+}</code></pre>
+            </div>
+
+            <div class="config-block">
+                <h4>How to Get SAML Configuration</h4>
+                <ol>
+                    <li><strong>Access IdP Dashboard:</strong> Navigate to your SAML identity provider</li>
+                    <li><strong>Download Metadata:</strong> Get SAML metadata XML from IdP</li>
+                    <li><strong>Extract Certificate:</strong> Copy the X509Certificate value</li>
+                    <li><strong>Get Entry Point:</strong> Copy the SSO URL from metadata</li>
+                    <li><strong>Set Callback URL:</strong> Configure in both your IdP and saml-config.json</li>
+                </ol>
+
+                <h4>Example: Fetching Metadata</h4>
+                <pre><code>curl -s "https://your-idp.example.com/saml-metadata" > metadata.xml</code></pre>
+            </div>
+
+            <div class="config-block">
+                <h4>SAML Attributes Mapping</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SAML Attribute</th>
+                            <th>Application Field</th>
+                            <th>Required</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>email</td>
+                            <td>user.email</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>name / displayName</td>
+                            <td>user.name</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>nameID</td>
+                            <td>user.nameID</td>
+                            <td>Yes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Database Configuration</h2>
+            
+            <div class="config-block">
+                <h3>Supported Databases</h3>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <h3>PostgreSQL</h3>
+                        <ul>
+                            <li><strong>Driver:</strong> pg</li>
+                            <li><strong>Default Port:</strong> 5432</li>
+                            <li><strong>Connection:</strong> User credentials</li>
+                            <li><strong>Features:</strong> Full support</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h3>MySQL</h3>
+                        <ul>
+                            <li><strong>Driver:</strong> mysql2</li>
+                            <li><strong>Default Port:</strong> 3306</li>
+                            <li><strong>Connection:</strong> User credentials</li>
+                            <li><strong>Features:</strong> Full support</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h3>Oracle</h3>
+                        <ul>
+                            <li><strong>Driver:</strong> oracledb</li>
+                            <li><strong>Default Port:</strong> 1521</li>
+                            <li><strong>Connection:</strong> User credentials</li>
+                            <li><strong>Features:</strong> Basic support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-block">
+                <h3>Connection Parameters</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Description</th>
+                            <th>Required</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>type</td>
+                            <td>Database type</td>
+                            <td>Yes</td>
+                            <td>postgres, mysql, oracle</td>
+                        </tr>
+                        <tr>
+                            <td>host</td>
+                            <td>Database server hostname</td>
+                            <td>Yes</td>
+                            <td>localhost, db.example.com</td>
+                        </tr>
+                        <tr>
+                            <td>port</td>
+                            <td>Database server port</td>
+                            <td>Yes</td>
+                            <td>5432, 3306, 1521</td>
+                        </tr>
+                        <tr>
+                            <td>database</td>
+                            <td>Database name</td>
+                            <td>Yes</td>
+                            <td>mydb, production</td>
+                        </tr>
+                        <tr>
+                            <td>user</td>
+                            <td>Database username</td>
+                            <td>Yes</td>
+                            <td>dbuser</td>
+                        </tr>
+                        <tr>
+                            <td>password</td>
+                            <td>Database password</td>
+                            <td>Yes</td>
+                            <td>********</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info">
+                    <strong>Security:</strong> User credentials are never stored. They exist only in the session and are cleared on logout.
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Installation & Setup</h2>
+            
+            <div class="config-block">
+                <h3>Prerequisites</h3>
+                <ul>
+                    <li>Node.js 18+ and npm</li>
+                    <li>Access to database servers (PostgreSQL/MySQL/Oracle)</li>
+                    <li>SAML 2.0 identity provider configured</li>
+                    <li>SSL certificates (for production)</li>
+                </ul>
+            </div>
+
+            <div class="config-block">
+                <h3>Step 1: Clone and Install</h3>
+                <pre><code># Clone repository
+git clone &lt;repository-url&gt;
+cd dbclient
+
+# Install dependencies
+npm install</code></pre>
+            </div>
+
+            <div class="config-block">
+                <h3>Step 2: Configure Environment</h3>
+                <pre><code># Copy example files
+cp .env.example .env
+cp .env.server.example .env.server
+
+# Edit configuration files
+nano .env
+nano .env.server
+nano saml-config.json</code></pre>
+            </div>
+
+            <div class="config-block">
+                <h3>Step 3: Start Services</h3>
+                <pre><code># Terminal 1: Start backend
+npm run server
+
+# Terminal 2: Start frontend
+npm run dev</code></pre>
+            </div>
+
+            <div class="config-block">
+                <h3>Step 4: Access Application</h3>
+                <ul>
+                    <li><strong>Frontend:</strong> http://localhost:5173</li>
+                    <li><strong>Backend:</strong> http://localhost:3002</li>
+                    <li><strong>SAML Callback:</strong> http://localhost:3002/api/auth/saml/callback</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Production Configuration</h2>
+            
+            <div class="config-block">
+                <h3>Environment Changes</h3>
+                <pre><code># .env (Frontend)
+VITE_API_URL=https://api.yourdomain.com
+
+# .env.server (Backend)
+PORT=3002
+NODE_ENV=production
+SESSION_SECRET=&lt;generate-strong-random-secret&gt;
+FRONTEND_URL=https://yourdomain.com
+
+# Optional: Redis for session storage
+REDIS_URL=redis://your-redis-server:6379
+REDIS_PASSWORD=your-redis-password</code></pre>
+            </div>
+
+            <div class="config-block">
+                <h3>SAML Production URLs</h3>
+                <pre><code>{
+  "entryPoint": "https://your-idp.example.com/sso/saml",
+  "callbackUrl": "https://api.yourdomain.com/api/auth/saml/callback",
+  "issuer": "https://api.yourdomain.com"
+}</code></pre>
+            </div>
+
+            <div class="config-block">
+                <h3>Build for Production</h3>
+                <pre><code># Build frontend
+npm run build
+
+# Serve with production server (e.g., nginx)
+# Backend runs with: NODE_ENV=production node server.js</code></pre>
+            </div>
+
+            <div class="warning">
+                <strong>Production Checklist:</strong>
+                <ul>
+                    <li>✓ Change SESSION_SECRET to strong random value</li>
+                    <li>✓ Use HTTPS for all URLs</li>
+                    <li>✓ Configure Redis for session storage</li>
+                    <li>✓ Set up proper CORS policies</li>
+                    <li>✓ Enable rate limiting</li>
+                    <li>✓ Configure firewall rules</li>
+                    <li>✓ Set up monitoring and logging</li>
+                    <li>✓ Regular security updates</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Troubleshooting</h2>
+            
+            <div class="config-block">
+                <h3>Common Issues</h3>
+                
+                <h4>SAML Authentication Fails</h4>
+                <ul>
+                    <li>Verify certificate in saml-config.json (no headers/footers)</li>
+                    <li>Check callback URL matches in both IdP and config</li>
+                    <li>Ensure issuer matches expected entity ID</li>
+                    <li>Check server logs for SAML errors</li>
+                </ul>
+
+                <h4>Database Connection Fails</h4>
+                <ul>
+                    <li>Verify database server is accessible</li>
+                    <li>Check firewall rules allow connection</li>
+                    <li>Confirm credentials are correct</li>
+                    <li>Ensure database driver is installed</li>
+                </ul>
+
+                <h4>Session Expires Too Quickly</h4>
+                <ul>
+                    <li>Increase INACTIVITY_TIMEOUT in .env.server</li>
+                    <li>Check activity monitoring is working</li>
+                    <li>Verify session secret is set</li>
+                </ul>
+
+                <h4>CORS Errors</h4>
+                <ul>
+                    <li>Verify FRONTEND_URL in .env.server</li>
+                    <li>Check credentials: 'include' in fetch requests</li>
+                    <li>Ensure CORS middleware is configured</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <a href="architecture.html">← Previous: Architecture</a> | 
+        <a href="index.html">Home</a> | 
+        <a href="authentication.html">Next: Authentication →</a>
+    </footer>
+</body>
+</html>

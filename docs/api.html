@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Reference - QueryForge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🔌 API Reference</h1>
+        <p>Backend Endpoints and Request/Response Formats</p>
+    </header>
+
+    <nav class="breadcrumb">
+        <a href="index.html">Home</a> &gt; API Reference
+    </nav>
+
+    <div class="container">
+        <section class="doc-section">
+            <h2>Authentication Endpoints</h2>
+            
+            <div class="endpoint">
+                <h3>POST /api/connect</h3>
+                <p>Connect to a database with user credentials</p>
+                
+                <h4>Request Body:</h4>
+                <div class="code-block">
+{
+  "dbType": "postgresql",
+  "host": "localhost",
+  "port": 5432,
+  "database": "mydb",
+  "username": "user",
+  "password": "pass"
+}
+                </div>
+
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "message": "Connected successfully"
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/disconnect</h3>
+                <p>Disconnect from database and clear session</p>
+                
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "message": "Disconnected successfully"
+}
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Query Endpoints</h2>
+            
+            <div class="endpoint">
+                <h3>POST /api/query</h3>
+                <p>Execute SQL query</p>
+                
+                <h4>Request Body:</h4>
+                <div class="code-block">
+{
+  "query": "SELECT * FROM users LIMIT 10"
+}
+                </div>
+
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "results": [
+    {"id": 1, "name": "John", "email": "john@example.com"},
+    {"id": 2, "name": "Jane", "email": "jane@example.com"}
+  ],
+  "rowCount": 2,
+  "executionTime": 45
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/explain</h3>
+                <p>Get query execution plan</p>
+                
+                <h4>Request Body:</h4>
+                <div class="code-block">
+{
+  "query": "SELECT * FROM users WHERE email = 'test@example.com'"
+}
+                </div>
+
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "plan": [
+    {"QUERY PLAN": "Seq Scan on users (cost=0.00..35.50 rows=10 width=100)"},
+    {"QUERY PLAN": "  Filter: (email = 'test@example.com')"}
+  ]
+}
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Schema Endpoints</h2>
+            
+            <div class="endpoint">
+                <h3>POST /api/db/tables</h3>
+                <p>List all tables</p>
+                
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "tables": [
+    {"schema": "public", "name": "users", "type": "table"},
+    {"schema": "public", "name": "orders", "type": "table"}
+  ]
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/functions</h3>
+                <p>List all functions/procedures</p>
+                
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "functions": [
+    {
+      "schema": "public",
+      "name": "calculate_total",
+      "return_type": "numeric",
+      "arguments": "order_id integer"
+    }
+  ]
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/views</h3>
+                <p>List all views</p>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/indexes</h3>
+                <p>List all indexes</p>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/sequences</h3>
+                <p>List all sequences</p>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/triggers</h3>
+                <p>List all triggers</p>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>DBA Endpoints</h2>
+            
+            <div class="endpoint">
+                <h3>POST /api/db/sessions</h3>
+                <p>List active database sessions</p>
+                
+                <h4>Response (PostgreSQL):</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "sessions": [
+    {
+      "pid": 12345,
+      "user": "dbuser",
+      "database": "mydb",
+      "state": "active",
+      "query": "SELECT * FROM users",
+      "duration": "00:00:05"
+    }
+  ]
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/locks</h3>
+                <p>List database locks</p>
+                
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "locks": [
+    {
+      "locktype": "relation",
+      "database": "mydb",
+      "relation": "users",
+      "mode": "AccessShareLock",
+      "granted": true,
+      "pid": 12345
+    }
+  ]
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/kill-session</h3>
+                <p>Terminate a database session</p>
+                
+                <h4>Request Body (PostgreSQL):</h4>
+                <div class="code-block">
+{
+  "pid": 12345
+}
+                </div>
+
+                <h4>Request Body (Oracle):</h4>
+                <div class="code-block">
+{
+  "sid": 123,
+  "serial": 456
+}
+                </div>
+
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "message": "Session terminated successfully"
+}
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Security:</strong> This action is logged with user, timestamp, and target session details.
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/users</h3>
+                <p>List database users and roles</p>
+                
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "users": [
+    {
+      "username": "dbuser",
+      "superuser": false,
+      "createdb": false,
+      "createrole": false,
+      "canlogin": true
+    }
+  ]
+}
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Export Endpoints</h2>
+            
+            <div class="endpoint">
+                <h3>POST /api/log-export</h3>
+                <p>Log export operation for compliance</p>
+                
+                <h4>Request Body:</h4>
+                <div class="code-block">
+{
+  "format": "xlsx",
+  "rowCount": 150,
+  "query": "SELECT * FROM users"
+}
+                </div>
+
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "success": true,
+  "message": "Export logged successfully"
+}
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Phase A: Advanced DBA Endpoints ✨ NEW</h2>
+            
+            <div class="endpoint">
+                <h3>POST /api/db/emergency-mode</h3>
+                <p>Toggle emergency mode (read-only or statement timeout)</p>
+                
+                <h4>Request Body:</h4>
+                <div class="code-block">
+{
+  "action": "readOnly",  // or "timeout"
+  "enable": true         // or false to disable
+}
+                </div>
+
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "success": true
+}
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Security:</strong> Requires ALTER DATABASE (PostgreSQL) or SUPER (MySQL) privilege. All actions logged to security log.
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/lock-graph</h3>
+                <p>Get blocking chain visualization</p>
+                
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "lockGraph": [
+    {
+      "blocker_pid": 12345,
+      "blocked_pid": 12346,
+      "blocker_query": "UPDATE users SET ...",
+      "blocked_query": "SELECT * FROM users ...",
+      "depth": 1
+    }
+  ]
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/performance</h3>
+                <p>Get query performance statistics and unused indexes</p>
+                
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "topQueries": [
+    {
+      "query": "SELECT * FROM large_table",
+      "calls": 1000,
+      "total_exec_time": 45000.5,
+      "mean_exec_time": 45.0,
+      "max_exec_time": 150.2,
+      "rows": 50000
+    }
+  ],
+  "unusedIndexes": [
+    {
+      "schemaname": "public",
+      "tablename": "users",
+      "indexname": "idx_unused",
+      "size": "128 MB",
+      "idx_scan": 0
+    }
+  ]
+}
+                </div>
+
+                <div class="info-box">
+                    <strong>📋 Requirement:</strong> Requires pg_stat_statements extension to be installed and configured.
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/bloat</h3>
+                <p>Get table bloat analysis</p>
+                
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "bloat": [
+    {
+      "schemaname": "public",
+      "tablename": "large_table",
+      "size": "1024 MB",
+      "n_dead_tup": 50000,
+      "bloat_pct": 25.5
+    }
+  ]
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/autovacuum-status</h3>
+                <p>Get autovacuum status for all tables</p>
+                
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "status": [
+    {
+      "schemaname": "public",
+      "tablename": "users",
+      "last_vacuum": "2026-02-19 10:30:00",
+      "last_autovacuum": "2026-02-19 11:00:00",
+      "last_analyze": "2026-02-19 10:30:00",
+      "last_autoanalyze": "2026-02-19 11:00:00",
+      "vacuum_count": 5,
+      "autovacuum_count": 10
+    }
+  ]
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <h3>POST /api/db/vacuum</h3>
+                <p>Execute VACUUM or VACUUM ANALYZE on a table</p>
+                
+                <h4>Request Body:</h4>
+                <div class="code-block">
+{
+  "table": "public.users",
+  "analyze": true  // false for VACUUM only
+}
+                </div>
+
+                <h4>Response:</h4>
+                <div class="code-block">
+{
+  "success": true
+}
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Warning:</strong> VACUUM may briefly lock tables. Requires VACUUM privilege. All operations logged to activity log.
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Error Responses</h2>
+            
+            <h3>Standard Error Format</h3>
+            <div class="code-block">
+{
+  "success": false,
+  "error": "Error message description"
+}
+            </div>
+
+            <h3>Common HTTP Status Codes</h3>
+            <ul>
+                <li><strong>200 OK:</strong> Request successful</li>
+                <li><strong>400 Bad Request:</strong> Invalid request parameters</li>
+                <li><strong>401 Unauthorized:</strong> Not authenticated</li>
+                <li><strong>403 Forbidden:</strong> No session or insufficient permissions</li>
+                <li><strong>500 Internal Server Error:</strong> Server or database error</li>
+            </ul>
+
+            <h3>Example Error Responses</h3>
+            <div class="code-block">
+// No active session
+{
+  "success": false,
+  "error": "No active database connection"
+}
+
+// Query syntax error
+{
+  "success": false,
+  "error": "syntax error at or near \"SELCT\""
+}
+
+// Permission denied
+{
+  "success": false,
+  "error": "permission denied for table users"
+}
+
+// Extension not installed (Performance Monitor)
+{
+  "error": "pg_stat_statements extension not installed",
+  "instructions": "Run: CREATE EXTENSION pg_stat_statements;"
+}
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Request Headers</h2>
+            
+            <h3>Required Headers</h3>
+            <div class="code-block">
+Content-Type: application/json
+Cookie: connect.sid=...
+            </div>
+
+            <h3>Session Management</h3>
+            <p>All API requests require a valid session cookie obtained after SAML authentication. The session is automatically managed by the browser.</p>
+        </section>
+
+        <section class="doc-section">
+            <h2>Rate Limiting</h2>
+            
+            <div class="info-box">
+                <h3>Current Limits</h3>
+                <ul>
+                    <li><strong>Query Results:</strong> Maximum 10,000 rows per query</li>
+                    <li><strong>Session Timeout:</strong> 5 minutes inactivity, 60 minutes maximum</li>
+                    <li><strong>Concurrent Connections:</strong> One session per user</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 QueryForge Contributors | <a href="index.html">Back to Documentation Home</a></p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Features - QueryForge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>💾 Database Features</h1>
+        <p>Multi-Database Support, SQL Editor, and Query Tools</p>
+    </header>
+
+    <nav class="breadcrumb">
+        <a href="index.html">Home</a> &gt; Database Features
+    </nav>
+
+    <div class="container">
+        <section class="doc-section">
+            <h2>Supported Databases</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-box">
+                    <h3>🐘 PostgreSQL</h3>
+                    <ul>
+                        <li>Versions 10+</li>
+                        <li>Full transaction support</li>
+                        <li>EXPLAIN ANALYZE</li>
+                        <li>Schema introspection</li>
+                        <li>Function/trigger support</li>
+                    </ul>
+                </div>
+
+                <div class="feature-box">
+                    <h3>🐬 MySQL</h3>
+                    <ul>
+                        <li>Versions 5.7+, 8.0+</li>
+                        <li>InnoDB transactions</li>
+                        <li>EXPLAIN support</li>
+                        <li>Stored procedures</li>
+                        <li>Trigger management</li>
+                    </ul>
+                </div>
+
+                <div class="feature-box">
+                    <h3>🔶 Oracle</h3>
+                    <ul>
+                        <li>Versions 11g+</li>
+                        <li>PL/SQL support</li>
+                        <li>EXPLAIN PLAN</li>
+                        <li>Package management</li>
+                        <li>Advanced features</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>SQL Editor</h2>
+            
+            <h3>Features</h3>
+            <ul>
+                <li><strong>Multiple Tabs:</strong> Work on multiple queries simultaneously</li>
+                <li><strong>Syntax Highlighting:</strong> SQL keywords, strings, comments</li>
+                <li><strong>Code Formatting:</strong> Auto-format SQL with proper indentation</li>
+                <li><strong>Line Numbers:</strong> Easy reference and debugging</li>
+                <li><strong>Bracket Matching:</strong> Automatic parenthesis matching</li>
+                <li><strong>Code Folding:</strong> Collapse/expand code blocks</li>
+                <li><strong>Tab Persistence:</strong> Queries saved across sessions</li>
+            </ul>
+
+            <h3>Keyboard Shortcuts</h3>
+            <div class="code-block">
+Ctrl+Enter       Execute query
+Ctrl+Shift+F     Search everywhere
+Ctrl+/           Toggle comment
+Tab              Indent
+Shift+Tab        Outdent
+            </div>
+
+            <h3>Query Execution</h3>
+            <ul>
+                <li>Execute selected text or entire query</li>
+                <li>Multiple statements separated by semicolons</li>
+                <li>Progress indicators for long-running queries</li>
+                <li>Query cancellation support</li>
+                <li>Automatic error detection</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Object Browser</h2>
+            
+            <h3>Object Types</h3>
+            <ul>
+                <li><strong>Tables:</strong> View structure, columns, constraints</li>
+                <li><strong>Views:</strong> See view definitions and dependencies</li>
+                <li><strong>Functions:</strong> Browse stored functions and procedures</li>
+                <li><strong>Indexes:</strong> Index details and statistics</li>
+                <li><strong>Sequences:</strong> Sequence values and properties</li>
+                <li><strong>Triggers:</strong> Trigger definitions and timing</li>
+            </ul>
+
+            <h3>Features</h3>
+            <ul>
+                <li>Schema grouping with expandable tree</li>
+                <li>Search across all objects</li>
+                <li>Object count per type</li>
+                <li>Quick navigation</li>
+                <li>View source code/definitions</li>
+                <li>Metadata display</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Results Viewer</h2>
+            
+            <h3>Display Features</h3>
+            <ul>
+                <li><strong>Pagination:</strong> 50/100/500/1000 rows per page</li>
+                <li><strong>Column Sorting:</strong> Click headers to sort ascending/descending</li>
+                <li><strong>Filtering:</strong> Search across all columns</li>
+                <li><strong>Row Selection:</strong> Select individual or all rows</li>
+                <li><strong>Row Limit:</strong> Maximum 10,000 rows per query</li>
+            </ul>
+
+            <h3>Export Options</h3>
+            <ul>
+                <li><strong>Excel (.xlsx):</strong> Full formatting and data types</li>
+                <li><strong>CSV:</strong> Standard comma-separated values</li>
+                <li><strong>JSON:</strong> Structured data format</li>
+                <li><strong>Copy as INSERT:</strong> Generate SQL INSERT statements</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>Export Logging:</strong> All exports are logged with user, timestamp, row count, and format for compliance.
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Query Features</h2>
+            
+            <h3>EXPLAIN Plans</h3>
+            <ul>
+                <li>Visual query execution plans</li>
+                <li>Cost analysis</li>
+                <li>Index usage detection</li>
+                <li>Performance optimization hints</li>
+            </ul>
+
+            <h3>Transaction Management</h3>
+            <div class="code-block">
+BEGIN;              Start transaction
+COMMIT;             Commit changes
+ROLLBACK;           Undo changes
+            </div>
+
+            <h3>Query History</h3>
+            <ul>
+                <li>Recent queries saved</li>
+                <li>Quick re-execution</li>
+                <li>Query timestamps</li>
+                <li>Result row counts</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>DBA Tools</h2>
+            
+            <h3>Session Monitor</h3>
+            <ul>
+                <li>View all active database sessions</li>
+                <li>See running queries</li>
+                <li>Kill sessions (with logging)</li>
+                <li>Auto-refresh every 5 seconds</li>
+                <li>Session duration and state</li>
+            </ul>
+
+            <h3>Lock Monitor</h3>
+            <ul>
+                <li>View all database locks</li>
+                <li>Identify blocking queries</li>
+                <li>Lock types and modes</li>
+                <li>Granted vs waiting locks</li>
+                <li>Lock holder information</li>
+            </ul>
+
+            <h3>User Management</h3>
+            <ul>
+                <li>List all database users/roles</li>
+                <li>View user privileges</li>
+                <li>Account status (active/locked)</li>
+                <li>Role memberships</li>
+                <li>Connection limits</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Phase A: Advanced DBA Tools ✨ NEW</h2>
+            
+            <h3>Emergency Mode</h3>
+            <p>Critical incident response controls in the DBA Tools header:</p>
+            <ul>
+                <li><strong>Read-Only Mode:</strong> One-click toggle to block all write operations</li>
+                <li><strong>Statement Timeout:</strong> Set 10-second timeout for all queries</li>
+                <li><strong>Visual Indicators:</strong> Buttons change color when active</li>
+                <li><strong>Confirmation Required:</strong> All changes require confirmation</li>
+                <li><strong>Security Logging:</strong> All emergency mode changes logged</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>⚠️ Permissions Required:</strong>
+                <ul>
+                    <li>PostgreSQL: ALTER DATABASE or SUPERUSER</li>
+                    <li>MySQL: SUPER privilege</li>
+                    <li>Oracle: ALTER SYSTEM</li>
+                </ul>
+            </div>
+
+            <h3>Lock Graph Visualization</h3>
+            <p>Visual blocking chain analysis in the Locks tab:</p>
+            <ul>
+                <li><strong>Blocking Chain Tree:</strong> Visual representation of lock dependencies</li>
+                <li><strong>Root Blocker:</strong> Identified with red badge</li>
+                <li><strong>Blocked Sessions:</strong> Shown with orange badges</li>
+                <li><strong>Query Preview:</strong> See queries for each lock</li>
+                <li><strong>Depth Indication:</strong> Indentation shows blocking depth</li>
+            </ul>
+
+            <h3>Maintenance Tools</h3>
+            <p>Daily DBA maintenance in the new Maintenance tab:</p>
+            
+            <h4>Bloat Analysis</h4>
+            <ul>
+                <li>Table bloat percentage calculation</li>
+                <li>Dead tuple counts</li>
+                <li>Table size display</li>
+                <li>Color-coded indicators (red >20%, orange <20%)</li>
+                <li>One-click VACUUM and ANALYZE buttons</li>
+            </ul>
+
+            <h4>Autovacuum Status</h4>
+            <ul>
+                <li>Last vacuum/autovacuum timestamps</li>
+                <li>Last analyze/autoanalyze timestamps</li>
+                <li>Vacuum and autovacuum counts</li>
+                <li>Sorted by most recent activity</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>⚠️ VACUUM Warning:</strong> VACUUM operations may briefly lock tables. Always shows confirmation dialog before execution.
+            </div>
+
+            <h3>Performance Monitor</h3>
+            <p>Query and index analysis in the new Performance tab:</p>
+            
+            <h4>Top Queries</h4>
+            <ul>
+                <li>Top 20 queries by total execution time</li>
+                <li>Call counts and statistics</li>
+                <li>Mean, max, and total execution times</li>
+                <li>Row counts returned</li>
+                <li>Query preview with full text on hover</li>
+            </ul>
+
+            <h4>Unused Indexes</h4>
+            <ul>
+                <li>Indexes with zero scans</li>
+                <li>Index size display</li>
+                <li>Excludes primary keys</li>
+                <li>Sorted by size (largest first)</li>
+                <li>Candidates for removal</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>📋 Setup Required:</strong>
+                <p>Performance Monitor requires pg_stat_statements extension:</p>
+                <div class="code-block">
+CREATE EXTENSION pg_stat_statements;
+
+-- In postgresql.conf:
+shared_preload_libraries = 'pg_stat_statements'
+pg_stat_statements.track = all
+                </div>
+                <p>Restart PostgreSQL after configuration changes.</p>
+            </div>
+
+            <h3>Permissions Summary</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>PostgreSQL</th>
+                        <th>MySQL</th>
+                        <th>Oracle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Emergency Mode</td>
+                        <td>ALTER DATABASE</td>
+                        <td>SUPER</td>
+                        <td>ALTER SYSTEM</td>
+                    </tr>
+                    <tr>
+                        <td>Lock Graph</td>
+                        <td>pg_locks, pg_stat_activity</td>
+                        <td>PROCESS</td>
+                        <td>V$LOCK, V$SESSION</td>
+                    </tr>
+                    <tr>
+                        <td>Maintenance Tools</td>
+                        <td>VACUUM, pg_stat_user_tables</td>
+                        <td>OPTIMIZE TABLE</td>
+                        <td>ANALYZE</td>
+                    </tr>
+                    <tr>
+                        <td>Performance Monitor</td>
+                        <td>pg_stat_statements extension</td>
+                        <td>performance_schema</td>
+                        <td>V$SQL, DBA_HIST_SQLSTAT</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="doc-section">
+            <h2>Search Everywhere</h2>
+            
+            <h3>Global Search (Ctrl+Shift+F)</h3>
+            <ul>
+                <li>Search across all database objects</li>
+                <li>Real-time filtering as you type</li>
+                <li>Search by name, schema, or type</li>
+                <li>Quick navigation to objects</li>
+                <li>Visual icons for object types</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Advanced Features</h2>
+            
+            <h3>Query Formatting</h3>
+            <ul>
+                <li>Automatic SQL beautification</li>
+                <li>Consistent indentation</li>
+                <li>Keyword capitalization</li>
+                <li>Line breaks for readability</li>
+            </ul>
+
+            <h3>Dark/Light Mode</h3>
+            <ul>
+                <li>Toggle between themes</li>
+                <li>Preference saved per user</li>
+                <li>Optimized for long sessions</li>
+                <li>Reduced eye strain</li>
+            </ul>
+
+            <h3>Notifications</h3>
+            <ul>
+                <li>Success/error messages</li>
+                <li>Query execution time</li>
+                <li>Row counts</li>
+                <li>Auto-dismiss or manual close</li>
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 QueryForge Contributors | <a href="index.html">Back to Documentation Home</a></p>
+    </footer>
+</body>
+</html>

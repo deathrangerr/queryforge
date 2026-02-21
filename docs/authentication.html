@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication & Security - QueryForge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🔐 Authentication & Security</h1>
+        <p>SAML 2.0, Session Management, and Security Features</p>
+    </header>
+
+    <nav class="breadcrumb">
+        <a href="index.html">Home</a> &gt; Authentication & Security
+    </nav>
+
+    <div class="container">
+        <section class="doc-section">
+            <h2>SAML 2.0 Authentication</h2>
+            <p>The application uses SAML 2.0 for enterprise single sign-on.</p>
+            
+            <h3>Configuration</h3>
+            <div class="code-block">
+{
+  "entryPoint": "https://your-idp.example.com/sso/saml",
+  "issuer": "database-client",
+  "callbackUrl": "https://your-app-domain.com/auth/saml/callback",
+  "cert": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"
+}
+            </div>
+
+            <h3>Authentication Flow</h3>
+            <ol>
+                <li>User accesses the application</li>
+                <li>Redirected to SAML Identity Provider</li>
+                <li>User authenticates with corporate credentials</li>
+                <li>SAML assertion returned to callback URL</li>
+                <li>Session created with user attributes</li>
+                <li>User redirected to application</li>
+            </ol>
+        </section>
+
+        <section class="doc-section">
+            <h2>Session Management</h2>
+            
+            <h3>Session Lifecycle</h3>
+            <ul>
+                <li><strong>Inactivity Timeout:</strong> 5 minutes</li>
+                <li><strong>Maximum Duration:</strong> 60 minutes</li>
+                <li><strong>Single Session:</strong> One active session per user</li>
+                <li><strong>Query Protection:</strong> Sessions extended during query execution</li>
+            </ul>
+
+            <h3>Session Storage</h3>
+            <p>Sessions are stored server-side with the following attributes:</p>
+            <ul>
+                <li>User email (from SAML assertion)</li>
+                <li>Database connection details</li>
+                <li>Last activity timestamp</li>
+                <li>Session creation time</li>
+                <li>Active transaction state</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Database Credentials</h2>
+            
+            <h3>User Credentials Approach</h3>
+            <p>Each user provides their own database credentials - no shared accounts.</p>
+            
+            <div class="info-box">
+                <strong>Security Benefits:</strong>
+                <ul>
+                    <li>Individual accountability for all database operations</li>
+                    <li>Audit trails tied to specific users</li>
+                    <li>No credential sharing or rotation issues</li>
+                    <li>Database-level access control enforcement</li>
+                </ul>
+            </div>
+
+            <h3>Credential Storage</h3>
+            <ul>
+                <li>Credentials stored in server-side session only</li>
+                <li>Never persisted to disk or database</li>
+                <li>Cleared on session expiration</li>
+                <li>Not logged or transmitted to client</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Security Features</h2>
+            
+            <h3>Query Safety</h3>
+            <ul>
+                <li><strong>Destructive Query Confirmation:</strong> Prompts for DELETE, DROP, TRUNCATE</li>
+                <li><strong>Transaction Management:</strong> Explicit BEGIN/COMMIT/ROLLBACK</li>
+                <li><strong>Auto-Rollback:</strong> Errors automatically rollback transactions</li>
+                <li><strong>Read-Only Mode:</strong> Optional mode to prevent mutations</li>
+            </ul>
+
+            <h3>Environment Protection</h3>
+            <ul>
+                <li><strong>Environment Banner:</strong> Visual indicator (DEV/UAT/PROD)</li>
+                <li><strong>Color Coding:</strong> Green (DEV), Yellow (UAT), Red (PROD)</li>
+                <li><strong>Risk Analysis:</strong> Automatic detection of risky queries</li>
+            </ul>
+
+            <h3>Logging & Audit</h3>
+            <ul>
+                <li>All queries logged with user, timestamp, and result</li>
+                <li>Security events (login, logout, session kill) logged</li>
+                <li>Export operations tracked</li>
+                <li>Failed authentication attempts logged</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Access Control</h2>
+            
+            <h3>Application Level</h3>
+            <ul>
+                <li>SAML authentication required for all access</li>
+                <li>No anonymous or guest access</li>
+                <li>Session validation on every request</li>
+            </ul>
+
+            <h3>Database Level</h3>
+            <ul>
+                <li>User's own database credentials used</li>
+                <li>Database-native access control enforced</li>
+                <li>No privilege escalation possible</li>
+                <li>Users limited to their granted permissions</li>
+            </ul>
+
+            <h3>DBA Tools</h3>
+            <ul>
+                <li>Session monitoring and termination</li>
+                <li>Lock monitoring</li>
+                <li>User/role management viewing</li>
+                <li>All DBA actions logged</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Best Practices</h2>
+            
+            <div class="warning-box">
+                <h3>⚠️ Security Recommendations</h3>
+                <ul>
+                    <li>Use strong database passwords (12+ characters)</li>
+                    <li>Enable MFA on SAML identity provider</li>
+                    <li>Regularly review activity logs</li>
+                    <li>Use read-only mode for production queries</li>
+                    <li>Always test destructive queries in DEV first</li>
+                    <li>Use transactions for multi-statement operations</li>
+                    <li>Log out when finished</li>
+                    <li>Never share database credentials</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 QueryForge Contributors | <a href="index.html">Back to Documentation Home</a></p>
+    </footer>
+</body>
+</html>

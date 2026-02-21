@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Guide - QueryForge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🚀 Deployment Guide</h1>
+        <p>Production Setup, Scaling, and Monitoring</p>
+    </header>
+
+    <nav class="breadcrumb">
+        <a href="index.html">Home</a> &gt; Deployment Guide
+    </nav>
+
+    <div class="container">
+        <section class="doc-section">
+            <h2>Prerequisites</h2>
+            
+            <h3>System Requirements</h3>
+            <ul>
+                <li><strong>Node.js:</strong> Version 18.x or higher</li>
+                <li><strong>Memory:</strong> Minimum 2GB RAM</li>
+                <li><strong>Storage:</strong> 500MB for application + logs</li>
+                <li><strong>Network:</strong> Access to database servers</li>
+            </ul>
+
+            <h3>Database Drivers</h3>
+            <ul>
+                <li><strong>PostgreSQL:</strong> pg (included)</li>
+                <li><strong>MySQL:</strong> mysql2 (included)</li>
+                <li><strong>Oracle:</strong> oracledb (requires Oracle Instant Client)</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Installation Steps</h2>
+            
+            <h3>1. Clone Repository</h3>
+            <div class="code-block">
+git clone &lt;repository-url&gt;
+cd dbclient
+            </div>
+
+            <h3>2. Install Dependencies</h3>
+            <div class="code-block">
+npm install
+            </div>
+
+            <h3>3. Configure Environment</h3>
+            <p>Create <code>.env</code> file:</p>
+            <div class="code-block">
+# Application Environment
+APP_ENV=production
+
+# Session Configuration
+SESSION_SECRET=&lt;generate-strong-random-secret&gt;
+SESSION_TIMEOUT=300000
+SESSION_MAX_AGE=3600000
+
+# Server Configuration
+PORT=3000
+            </div>
+
+            <p>Create <code>.env.server</code> file:</p>
+            <div class="code-block">
+# Server Binding
+HOST=0.0.0.0
+PORT=3000
+            </div>
+
+            <h3>4. Configure SAML</h3>
+            <p>Create <code>saml-config.json</code>:</p>
+            <div class="code-block">
+{
+  "entryPoint": "https://your-idp.example.com/sso/saml",
+  "issuer": "database-client",
+  "callbackUrl": "https://your-app-domain.com/auth/saml/callback",
+  "cert": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"
+}
+            </div>
+
+            <h3>5. Build Frontend</h3>
+            <div class="code-block">
+npm run build
+            </div>
+
+            <h3>6. Start Server</h3>
+            <div class="code-block">
+node server.js
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Production Deployment</h2>
+            
+            <h3>Using PM2 (Recommended)</h3>
+            <div class="code-block">
+# Install PM2
+npm install -g pm2
+
+# Start application
+pm2 start server.js --name dbclient
+
+# Enable startup script
+pm2 startup
+pm2 save
+
+# Monitor
+pm2 monit
+
+# View logs
+pm2 logs dbclient
+            </div>
+
+            <h3>PM2 Ecosystem File</h3>
+            <p>Create <code>ecosystem.config.js</code>:</p>
+            <div class="code-block">
+module.exports = {
+  apps: [{
+    name: 'dbclient',
+    script: 'server.js',
+    instances: 2,
+    exec_mode: 'cluster',
+    env: {
+      NODE_ENV: 'production',
+      PORT: 3000
+    },
+    error_file: './logs/pm2-error.log',
+    out_file: './logs/pm2-out.log',
+    log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
+    max_memory_restart: '1G'
+  }]
+};
+            </div>
+
+            <div class="code-block">
+# Start with ecosystem file
+pm2 start ecosystem.config.js
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Reverse Proxy Setup</h2>
+            
+            <h3>Nginx Configuration</h3>
+            <div class="code-block">
+server {
+    listen 80;
+    server_name your-domain.com;
+    
+    # Redirect to HTTPS
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name your-domain.com;
+    
+    ssl_certificate /path/to/cert.pem;
+    ssl_certificate_key /path/to/key.pem;
+    
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        
+        # Timeouts for long queries
+        proxy_connect_timeout 600;
+        proxy_send_timeout 600;
+        proxy_read_timeout 600;
+        send_timeout 600;
+    }
+}
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Docker Deployment</h2>
+            
+            <h3>Dockerfile</h3>
+            <div class="code-block">
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy application files
+COPY . .
+
+# Build frontend
+RUN npm run build
+
+# Create logs directory
+RUN mkdir -p logs
+
+# Expose port
+EXPOSE 3000
+
+# Start application
+CMD ["node", "server.js"]
+            </div>
+
+            <h3>Docker Compose</h3>
+            <div class="code-block">
+version: '3.8'
+
+services:
+  dbclient:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - APP_ENV=production
+    env_file:
+      - .env
+      - .env.server
+    volumes:
+      - ./logs:/app/logs
+      - ./saml-config.json:/app/saml-config.json:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+            </div>
+
+            <h3>Build and Run</h3>
+            <div class="code-block">
+# Build image
+docker-compose build
+
+# Start container
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop container
+docker-compose down
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Monitoring & Logging</h2>
+            
+            <h3>Application Logs</h3>
+            <ul>
+                <li><strong>Activity Log:</strong> <code>logs/activity-YYYY-MM-DD.log</code></li>
+                <li><strong>Security Log:</strong> <code>logs/security-YYYY-MM-DD.log</code></li>
+                <li><strong>Error Log:</strong> <code>logs/error-YYYY-MM-DD.log</code></li>
+            </ul>
+
+            <h3>Log Rotation</h3>
+            <p>Logs automatically rotate daily. Configure retention in <code>server.js</code>:</p>
+            <div class="code-block">
+maxFiles: '30d'  // Keep logs for 30 days
+            </div>
+
+            <h3>Health Check Endpoint</h3>
+            <div class="code-block">
+GET /health
+
+Response:
+{
+  "status": "ok",
+  "timestamp": "2026-02-19T11:22:00.000Z"
+}
+            </div>
+
+            <h3>Monitoring Metrics</h3>
+            <ul>
+                <li>Active sessions count</li>
+                <li>Query execution times</li>
+                <li>Error rates</li>
+                <li>Memory usage</li>
+                <li>CPU usage</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Security Hardening</h2>
+            
+            <h3>Environment Variables</h3>
+            <div class="warning-box">
+                <strong>⚠️ Critical:</strong>
+                <ul>
+                    <li>Never commit <code>.env</code> files to version control</li>
+                    <li>Use strong random SESSION_SECRET (32+ characters)</li>
+                    <li>Rotate SESSION_SECRET periodically</li>
+                    <li>Restrict file permissions: <code>chmod 600 .env*</code></li>
+                </ul>
+            </div>
+
+            <h3>HTTPS Only</h3>
+            <ul>
+                <li>Always use HTTPS in production</li>
+                <li>Use valid SSL certificates (Let's Encrypt recommended)</li>
+                <li>Enable HSTS headers</li>
+                <li>Disable HTTP access</li>
+            </ul>
+
+            <h3>Firewall Rules</h3>
+            <ul>
+                <li>Allow only necessary ports (443 for HTTPS)</li>
+                <li>Restrict database access to application server only</li>
+                <li>Use security groups/network ACLs</li>
+                <li>Enable fail2ban for brute force protection</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Backup & Recovery</h2>
+            
+            <h3>What to Backup</h3>
+            <ul>
+                <li><strong>Configuration:</strong> <code>.env</code>, <code>.env.server</code>, <code>saml-config.json</code></li>
+                <li><strong>Logs:</strong> <code>logs/</code> directory (for compliance)</li>
+                <li><strong>Application:</strong> Entire codebase</li>
+            </ul>
+
+            <h3>Backup Script</h3>
+            <div class="code-block">
+#!/bin/bash
+DATE=$(date +%Y%m%d)
+BACKUP_DIR="/backups/dbclient"
+
+# Create backup directory
+mkdir -p $BACKUP_DIR
+
+# Backup logs
+tar -czf $BACKUP_DIR/logs-$DATE.tar.gz logs/
+
+# Backup configuration (encrypted)
+tar -czf - .env* saml-config.json | \
+  openssl enc -aes-256-cbc -salt -out $BACKUP_DIR/config-$DATE.tar.gz.enc
+
+# Keep only last 30 days
+find $BACKUP_DIR -name "*.tar.gz*" -mtime +30 -delete
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Scaling Considerations</h2>
+            
+            <h3>Horizontal Scaling</h3>
+            <ul>
+                <li>Use PM2 cluster mode for multiple instances</li>
+                <li>Deploy behind load balancer (ALB, Nginx)</li>
+                <li>Enable sticky sessions for session persistence</li>
+                <li>Consider Redis for shared session storage</li>
+            </ul>
+
+            <h3>Performance Tuning</h3>
+            <ul>
+                <li>Adjust <code>max_memory_restart</code> in PM2</li>
+                <li>Configure database connection pooling</li>
+                <li>Enable gzip compression in Nginx</li>
+                <li>Use CDN for static assets</li>
+            </ul>
+
+            <h3>Database Connections</h3>
+            <ul>
+                <li>Each user session = 1 database connection</li>
+                <li>Plan database connection limits accordingly</li>
+                <li>Monitor connection pool usage</li>
+                <li>Set appropriate timeouts</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Troubleshooting</h2>
+            
+            <h3>Common Issues</h3>
+            
+            <div class="issue-box">
+                <h4>Application won't start</h4>
+                <ul>
+                    <li>Check <code>.env</code> files exist and are readable</li>
+                    <li>Verify <code>saml-config.json</code> is valid JSON</li>
+                    <li>Ensure port 3000 is not in use</li>
+                    <li>Check Node.js version (18+)</li>
+                </ul>
+            </div>
+
+            <div class="issue-box">
+                <h4>SAML authentication fails</h4>
+                <ul>
+                    <li>Verify <code>callbackUrl</code> matches IdP configuration</li>
+                    <li>Check certificate is correct and not expired</li>
+                    <li>Ensure HTTPS is enabled</li>
+                    <li>Review security logs</li>
+                </ul>
+            </div>
+
+            <div class="issue-box">
+                <h4>Database connection fails</h4>
+                <ul>
+                    <li>Verify network connectivity to database</li>
+                    <li>Check firewall rules</li>
+                    <li>Confirm credentials are correct</li>
+                    <li>Ensure database driver is installed</li>
+                </ul>
+            </div>
+
+            <h3>Debug Mode</h3>
+            <div class="code-block">
+# Enable debug logging
+DEBUG=* node server.js
+
+# Or with PM2
+pm2 start server.js --name dbclient --log-date-format 'YYYY-MM-DD HH:mm:ss Z'
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Maintenance</h2>
+            
+            <h3>Regular Tasks</h3>
+            <ul>
+                <li><strong>Daily:</strong> Monitor logs for errors</li>
+                <li><strong>Weekly:</strong> Review security logs, check disk space</li>
+                <li><strong>Monthly:</strong> Update dependencies, rotate secrets</li>
+                <li><strong>Quarterly:</strong> Security audit, performance review</li>
+            </ul>
+
+            <h3>Update Procedure</h3>
+            <div class="code-block">
+# Backup current version
+tar -czf dbclient-backup-$(date +%Y%m%d).tar.gz .
+
+# Pull latest code
+git pull
+
+# Install dependencies
+npm install
+
+# Rebuild frontend
+npm run build
+
+# Restart application
+pm2 restart dbclient
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 QueryForge Contributors | <a href="index.html">Back to Documentation Home</a></p>
+    </footer>
+</body>
+</html>
