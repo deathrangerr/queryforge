@@ -1,0 +1,370 @@
+/* DBA Tools Styles */
+.dba-tools {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+.dba-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.dba-header h3 {
+  font-size: 20px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.dba-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.emergency-controls {
+  display: flex;
+  gap: 8px;
+  padding-right: 15px;
+  border-right: 1px solid #e2e8f0;
+}
+
+.btn-emergency {
+  padding: 6px 12px;
+  border: 1px solid #fc8181;
+  background: #fff5f5;
+  color: #c53030;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-emergency:hover {
+  background: #fed7d7;
+}
+
+.btn-emergency.active {
+  background: #fc8181;
+  color: white;
+  border-color: #f56565;
+}
+
+.btn-action {
+  padding: 4px 8px;
+  margin: 0 4px;
+  border: 1px solid #4299e1;
+  background: #ebf8ff;
+  color: #2b6cb0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.btn-action:hover {
+  background: #bee3f8;
+}
+
+.auto-refresh-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.auto-refresh-toggle input {
+  cursor: pointer;
+}
+
+.btn-refresh {
+  padding: 8px 16px;
+  background: var(--gradient-start);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.btn-refresh:hover:not(:disabled) {
+  background: #5568d3;
+}
+
+.btn-refresh:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dba-tabs {
+  display: flex;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dba-tabs button {
+  flex: 1;
+  padding: 15px 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dba-tabs button:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.dba-tabs button.active {
+  color: var(--gradient-start);
+  border-bottom-color: var(--gradient-start);
+  background: var(--bg-primary);
+}
+
+.dba-content {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+}
+
+.dba-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: var(--card-bg);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dba-table thead {
+  background: var(--bg-secondary);
+}
+
+.dba-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.dba-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.dba-table tbody tr:hover {
+  background: var(--hover-bg);
+}
+
+.dba-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.query-cell {
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.details-cell {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-active {
+  background: #27ae60;
+  color: #fff;
+}
+
+.status-idle {
+  background: #95a5a6;
+  color: #fff;
+}
+
+.status-waiting {
+  background: #f39c12;
+  color: #fff;
+}
+
+.status-granted {
+  background: #27ae60;
+  color: #fff;
+}
+
+.status-locked {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.privilege-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  margin: 2px;
+  background: var(--gradient-start);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.btn-kill {
+  padding: 6px 12px;
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-kill:hover {
+  background: #c0392b;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+.privilege-badge.superuser {
+  background: #fed7d7;
+  color: #c53030;
+  border-color: #fc8181;
+}
+
+.lock-graph {
+  background: #f7fafc;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 4px solid #ed8936;
+}
+
+.lock-graph h4 {
+  margin: 0 0 10px 0;
+  color: #ed8936;
+}
+
+.lock-tree {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+}
+
+.lock-node {
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.blocker-badge, .blocked-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.blocker-badge {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.blocked-badge {
+  background: #feebc8;
+  color: #c05621;
+}
+
+.arrow {
+  color: #718096;
+  font-weight: bold;
+}
+
+.query-preview {
+  color: #4a5568;
+  font-size: 12px;
+}
+
+.perf-section, .maint-section {
+  margin-bottom: 30px;
+}
+
+.perf-section h4, .maint-section h4 {
+  margin: 0 0 15px 0;
+  color: #667eea;
+  font-size: 16px;
+}
+
+.error-state {
+  background: #fff5f5;
+  border: 1px solid #fc8181;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.error-state p {
+  margin: 10px 0;
+  color: #c53030;
+}
+
+.instructions {
+  font-family: 'Courier New', monospace;
+  background: #2d3748;
+  color: #e2e8f0;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.bloat-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.bloat-badge.high {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.bloat-badge.medium {
+  background: #feebc8;
+  color: #c05621;
+}
+
+.warning-cell {
+  color: #c05621;
+  font-weight: 600;
+}

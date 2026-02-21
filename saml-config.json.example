@@ -1,0 +1,7 @@
+{
+  "entryPoint": "https://your-idp.example.com/saml/sso",
+  "issuer": "your-app-name",
+  "identityProviderIssuer": "https://your-idp.example.com/entity-id",
+  "cert": "YOUR_IDP_CERTIFICATE_HERE",
+  "callbackUrl": "http://localhost:3002/api/auth/saml/callback"
+}

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Guide - QueryForge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>📖 User Guide</h1>
+        <p>Complete Guide to Using the QueryForge</p>
+    </header>
+
+    <nav class="breadcrumb">
+        <a href="index.html">Home</a> &gt; User Guide
+    </nav>
+
+    <div class="container">
+        <section class="doc-section">
+            <h2>Getting Started</h2>
+            
+            <h3>1. Login</h3>
+            <ol>
+                <li>Navigate to the application URL</li>
+                <li>You'll be redirected to your SAML identity provider for authentication</li>
+                <li>Enter your corporate credentials</li>
+                <li>After successful authentication, you'll be redirected back to the application</li>
+            </ol>
+
+            <h3>2. Connect to Database</h3>
+            <ol>
+                <li>Click the <strong>"Connect"</strong> button in the top toolbar</li>
+                <li>Fill in the connection form:
+                    <ul>
+                        <li><strong>Database Type:</strong> PostgreSQL, MySQL, or Oracle</li>
+                        <li><strong>Host:</strong> Database server hostname or IP</li>
+                        <li><strong>Port:</strong> Database port (default: 5432 for PostgreSQL, 3306 for MySQL, 1521 for Oracle)</li>
+                        <li><strong>Database:</strong> Database name</li>
+                        <li><strong>Username:</strong> Your database username</li>
+                        <li><strong>Password:</strong> Your database password</li>
+                    </ul>
+                </li>
+                <li>Click <strong>"Connect"</strong></li>
+                <li>Wait for the connection confirmation</li>
+            </ol>
+
+            <div class="info-box">
+                <strong>💡 Tip:</strong> Your credentials are stored only in your session and are never persisted to disk.
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>SQL Editor</h2>
+            
+            <h3>Working with Query Tabs</h3>
+            <ul>
+                <li><strong>Add Tab:</strong> Click the <strong>"+"</strong> button to create a new query tab</li>
+                <li><strong>Switch Tabs:</strong> Click on any tab to switch to it</li>
+                <li><strong>Rename Tab:</strong> Double-click the tab name to rename it</li>
+                <li><strong>Close Tab:</strong> Click the <strong>"×"</strong> button on the tab</li>
+            </ul>
+
+            <h3>Writing Queries</h3>
+            <ul>
+                <li>Type your SQL query in the editor</li>
+                <li>Syntax highlighting helps identify keywords, strings, and comments</li>
+                <li>Line numbers appear on the left for easy reference</li>
+                <li>Brackets are automatically matched</li>
+            </ul>
+
+            <h3>Executing Queries</h3>
+            <ul>
+                <li><strong>Execute All:</strong> Click <strong>"Execute"</strong> button or press <strong>Ctrl+Enter</strong></li>
+                <li><strong>Execute Selection:</strong> Select text and press <strong>Ctrl+Enter</strong></li>
+                <li><strong>Multiple Statements:</strong> Separate with semicolons (;)</li>
+            </ul>
+
+            <h3>Query Tools</h3>
+            <ul>
+                <li><strong>Format:</strong> Click <strong>"Format"</strong> to auto-format your SQL with proper indentation</li>
+                <li><strong>Explain:</strong> Click <strong>"Explain"</strong> to see the query execution plan</li>
+            </ul>
+
+            <div class="code-block">
+-- Example query
+SELECT u.id, u.name, u.email, COUNT(o.id) as order_count
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE u.created_at >= '2026-01-01'
+GROUP BY u.id, u.name, u.email
+ORDER BY order_count DESC
+LIMIT 10;
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Object Browser</h2>
+            
+            <h3>Browsing Database Objects</h3>
+            <ol>
+                <li>Click on the object type tabs: <strong>Tables</strong>, <strong>Views</strong>, <strong>Functions</strong>, <strong>Indexes</strong>, <strong>Sequences</strong>, <strong>Triggers</strong></li>
+                <li>Objects are grouped by schema</li>
+                <li>Click the <strong>▶</strong> arrow to expand a schema</li>
+                <li>Click on any object name to view its details</li>
+            </ol>
+
+            <h3>Searching Objects</h3>
+            <ul>
+                <li>Use the search box at the top of the Object Browser</li>
+                <li>Type to filter objects by name</li>
+                <li>Search works across all visible objects in the current tab</li>
+            </ul>
+
+            <h3>Viewing Object Details</h3>
+            <p>When you click an object, a modal window shows:</p>
+            <ul>
+                <li><strong>Tables:</strong> Columns, data types, constraints</li>
+                <li><strong>Views:</strong> View definition SQL</li>
+                <li><strong>Functions:</strong> Function source code, parameters, return type</li>
+                <li><strong>Indexes:</strong> Index definition, columns, type</li>
+                <li><strong>Sequences:</strong> Current value, increment, min/max values</li>
+                <li><strong>Triggers:</strong> Trigger definition, timing, event</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Results Viewer</h2>
+            
+            <h3>Viewing Results</h3>
+            <ul>
+                <li>Query results appear in a table below the editor</li>
+                <li>Column headers show the column names</li>
+                <li>Row count and execution time displayed at the top</li>
+            </ul>
+
+            <h3>Pagination</h3>
+            <ul>
+                <li>Select rows per page: <strong>50</strong>, <strong>100</strong>, <strong>500</strong>, or <strong>1000</strong></li>
+                <li>Use <strong>Previous</strong> and <strong>Next</strong> buttons to navigate pages</li>
+                <li>Current page and total pages shown in the middle</li>
+            </ul>
+
+            <h3>Sorting</h3>
+            <ul>
+                <li>Click any column header to sort by that column</li>
+                <li>First click: ascending order (▲)</li>
+                <li>Second click: descending order (▼)</li>
+                <li>Third click: remove sorting</li>
+            </ul>
+
+            <h3>Filtering</h3>
+            <ul>
+                <li>Use the search box above the results table</li>
+                <li>Type to filter rows across all columns</li>
+                <li>Filtering is case-insensitive</li>
+                <li>Clear the search box to show all results</li>
+            </ul>
+
+            <h3>Row Selection</h3>
+            <ul>
+                <li>Check the box in the first column to select a row</li>
+                <li>Check the header checkbox to select all visible rows</li>
+                <li>Selected rows are highlighted</li>
+                <li>Selection count shown at the top</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Exporting Data</h2>
+            
+            <h3>Export Formats</h3>
+            
+            <h4>Excel (.xlsx)</h4>
+            <ul>
+                <li>Click <strong>"Export to Excel"</strong></li>
+                <li>File downloads automatically</li>
+                <li>Includes all columns and data types</li>
+                <li>Formatted for easy viewing in Excel</li>
+            </ul>
+
+            <h4>CSV</h4>
+            <ul>
+                <li>Click <strong>"Export to CSV"</strong></li>
+                <li>Standard comma-separated values format</li>
+                <li>Can be opened in Excel, Google Sheets, or any text editor</li>
+            </ul>
+
+            <h4>JSON</h4>
+            <ul>
+                <li>Click <strong>"Export to JSON"</strong></li>
+                <li>Structured data format</li>
+                <li>Useful for APIs and data processing</li>
+            </ul>
+
+            <h4>Copy as INSERT</h4>
+            <ol>
+                <li>Select the rows you want to export (use checkboxes)</li>
+                <li>Click <strong>"Copy as INSERT"</strong></li>
+                <li>Enter the target table name when prompted</li>
+                <li>SQL INSERT statements are copied to your clipboard</li>
+                <li>Paste into your SQL editor or another tool</li>
+            </ol>
+
+            <div class="warning-box">
+                <strong>⚠️ Note:</strong> All exports are logged for compliance purposes, including user, timestamp, row count, and format.
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Transaction Management</h2>
+            
+            <h3>Starting a Transaction</h3>
+            <div class="code-block">
+BEGIN;
+            </div>
+
+            <h3>Committing Changes</h3>
+            <div class="code-block">
+COMMIT;
+            </div>
+
+            <h3>Rolling Back Changes</h3>
+            <div class="code-block">
+ROLLBACK;
+            </div>
+
+            <h3>Transaction Safety</h3>
+            <ul>
+                <li>Destructive queries (DELETE, DROP, TRUNCATE) show a confirmation dialog</li>
+                <li>Errors automatically rollback the transaction</li>
+                <li>Always test in DEV environment first</li>
+                <li>Use transactions for multi-statement operations</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>💡 Best Practice:</strong> Wrap multiple related statements in a transaction:
+                <div class="code-block">
+BEGIN;
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+COMMIT;
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>DBA Tools</h2>
+            
+            <h3>Accessing DBA Tools</h3>
+            <ul>
+                <li>Click the <strong>"DBA Tools"</strong> tab in the main navigation</li>
+                <li>Three sub-tabs available: <strong>Sessions</strong>, <strong>Locks</strong>, <strong>Users</strong></li>
+            </ul>
+
+            <h3>Session Monitor</h3>
+            <ul>
+                <li>View all active database sessions</li>
+                <li>See currently running queries</li>
+                <li>Check session duration and state</li>
+                <li>Kill sessions by clicking the <strong>"Kill"</strong> button</li>
+                <li>Enable <strong>"Auto-refresh"</strong> to update every 5 seconds</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>⚠️ Caution:</strong> Killing sessions can interrupt active work. Use with care. All session kills are logged.
+            </div>
+
+            <h3>Lock Monitor</h3>
+            <ul>
+                <li>View all database locks</li>
+                <li>Identify blocking queries</li>
+                <li>See lock types and modes</li>
+                <li>Check if locks are granted or waiting</li>
+                <li>Find the process holding each lock</li>
+            </ul>
+
+            <h3>User Management</h3>
+            <ul>
+                <li>List all database users and roles</li>
+                <li>View user privileges (superuser, createdb, etc.)</li>
+                <li>Check account status (active/locked)</li>
+                <li>See role memberships</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Search Everywhere</h2>
+            
+            <h3>Opening Search</h3>
+            <ul>
+                <li>Press <strong>Ctrl+Shift+F</strong></li>
+                <li>Or click the <strong>🔍 Search</strong> button in the toolbar</li>
+            </ul>
+
+            <h3>Using Search</h3>
+            <ol>
+                <li>Type in the search box</li>
+                <li>Results filter in real-time as you type</li>
+                <li>Search across all object types: tables, views, functions, indexes, sequences, triggers</li>
+                <li>Results show object icon, name, type, and schema</li>
+                <li>Click any result to view its details</li>
+            </ol>
+
+            <h3>Closing Search</h3>
+            <ul>
+                <li>Press <strong>Escape</strong></li>
+                <li>Or click outside the search modal</li>
+                <li>Or click the <strong>×</strong> button</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Environment Safety</h2>
+            
+            <h3>Environment Banner</h3>
+            <ul>
+                <li><strong>Green (DEV):</strong> Development environment - safe for testing</li>
+                <li><strong>Yellow (UAT):</strong> User acceptance testing - use caution</li>
+                <li><strong>Red (PROD):</strong> Production environment - extreme caution required</li>
+            </ul>
+
+            <h3>Read-Only Mode</h3>
+            <ul>
+                <li>Toggle read-only mode in production to prevent accidental changes</li>
+                <li>When enabled, only SELECT queries are allowed</li>
+                <li>Mutating queries (INSERT, UPDATE, DELETE) are blocked</li>
+            </ul>
+
+            <h3>Destructive Query Confirmation</h3>
+            <ul>
+                <li>DELETE, DROP, TRUNCATE queries show a confirmation dialog</li>
+                <li>Review the query carefully before confirming</li>
+                <li>Risk level is automatically analyzed</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Session Management</h2>
+            
+            <h3>Session Timeouts</h3>
+            <ul>
+                <li><strong>Inactivity Timeout:</strong> 5 minutes of no activity</li>
+                <li><strong>Maximum Duration:</strong> 60 minutes total</li>
+                <li><strong>Query Protection:</strong> Sessions are extended during query execution</li>
+            </ul>
+
+            <h3>Session Warnings</h3>
+            <ul>
+                <li>You'll receive a warning before session expiration</li>
+                <li>Click <strong>"Stay Connected"</strong> to extend your session</li>
+                <li>Or let it expire to automatically disconnect</li>
+            </ul>
+
+            <h3>Disconnecting</h3>
+            <ul>
+                <li>Click the <strong>"Disconnect"</strong> button in the toolbar</li>
+                <li>Your database connection is closed</li>
+                <li>Your session is cleared</li>
+                <li>You remain logged in via SAML</li>
+            </ul>
+
+            <h3>Logging Out</h3>
+            <ul>
+                <li>Click the <strong>"Logout"</strong> button</li>
+                <li>You're disconnected from the database</li>
+                <li>Your session is cleared</li>
+                <li>You're logged out of SAML</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Keyboard Shortcuts</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Shortcut</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Ctrl+Enter</strong></td>
+                        <td>Execute query</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ctrl+Shift+F</strong></td>
+                        <td>Open Search Everywhere</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ctrl+/</strong></td>
+                        <td>Toggle comment</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tab</strong></td>
+                        <td>Indent</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Shift+Tab</strong></td>
+                        <td>Outdent</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Escape</strong></td>
+                        <td>Close modal/dialog</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="doc-section">
+            <h2>Tips & Best Practices</h2>
+            
+            <h3>Query Performance</h3>
+            <ul>
+                <li>Use LIMIT to restrict result sets</li>
+                <li>Add WHERE clauses to filter data</li>
+                <li>Use EXPLAIN to analyze query plans</li>
+                <li>Create indexes for frequently queried columns</li>
+            </ul>
+
+            <h3>Data Safety</h3>
+            <ul>
+                <li>Always test queries in DEV first</li>
+                <li>Use transactions for multi-statement operations</li>
+                <li>Double-check WHERE clauses in UPDATE/DELETE</li>
+                <li>Use read-only mode when just viewing data</li>
+                <li>Export data before making bulk changes</li>
+            </ul>
+
+            <h3>Productivity</h3>
+            <ul>
+                <li>Use multiple tabs for different queries</li>
+                <li>Rename tabs to organize your work</li>
+                <li>Use Search Everywhere (Ctrl+Shift+F) to quickly find objects</li>
+                <li>Format queries for better readability</li>
+                <li>Save frequently used queries in a text file</li>
+            </ul>
+
+            <h3>Security</h3>
+            <ul>
+                <li>Never share your database credentials</li>
+                <li>Log out when finished</li>
+                <li>Use strong database passwords</li>
+                <li>Review activity logs regularly</li>
+                <li>Report suspicious activity immediately</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2>Troubleshooting</h2>
+            
+            <h3>Connection Issues</h3>
+            <ul>
+                <li>Verify hostname and port are correct</li>
+                <li>Check your database credentials</li>
+                <li>Ensure you have network access to the database</li>
+                <li>Confirm the database is running</li>
+            </ul>
+
+            <h3>Query Errors</h3>
+            <ul>
+                <li>Check SQL syntax</li>
+                <li>Verify table and column names</li>
+                <li>Ensure you have necessary permissions</li>
+                <li>Review error message for details</li>
+            </ul>
+
+            <h3>Session Expired</h3>
+            <ul>
+                <li>Click "Connect" to reconnect</li>
+                <li>Enter your credentials again</li>
+                <li>Your query tabs are preserved</li>
+            </ul>
+
+            <h3>Getting Help</h3>
+            <ul>
+                <li>Check the <a href="index.html">documentation</a></li>
+                <li>Review <a href="logging.html">logs</a> for error details</li>
+                <li>Contact your database administrator</li>
+                <li>Report issues to the support team</li>
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 QueryForge Contributors | <a href="index.html">Back to Documentation Home</a></p>
+    </footer>
+</body>
+</html>

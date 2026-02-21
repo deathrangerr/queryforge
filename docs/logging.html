@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logging & Compliance - QueryForge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>📋 Logging & Compliance</h1>
+        <p>Enterprise-Grade Audit Trail and Compliance Framework</p>
+    </header>
+
+    <nav class="breadcrumb">
+        <a href="index.html">Home</a> → Logging & Compliance
+    </nav>
+
+    <div class="container">
+        <div class="success">
+            <strong>✅ PRODUCTION READY:</strong> All logging requirements for security, compliance, and resilience are fully implemented and tested.
+        </div>
+
+        <section class="doc-section">
+            <h2>File-Based Logging System</h2>
+            
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3>Activity Logs</h3>
+                    <ul>
+                        <li><strong>File:</strong> logs/activity-YYYY-MM-DD.log</li>
+                        <li><strong>Retention:</strong> 90 days</li>
+                        <li><strong>Max Size:</strong> 20MB per file</li>
+                        <li><strong>Format:</strong> JSON</li>
+                        <li><strong>Purpose:</strong> User actions and operations</li>
+                    </ul>
+                </div>
+
+                <div class="tech-card">
+                    <h3>Security Logs</h3>
+                    <ul>
+                        <li><strong>File:</strong> logs/security-YYYY-MM-DD.log</li>
+                        <li><strong>Retention:</strong> 365 days</li>
+                        <li><strong>Max Size:</strong> 20MB per file</li>
+                        <li><strong>Format:</strong> JSON</li>
+                        <li><strong>Purpose:</strong> Security events and compliance</li>
+                    </ul>
+                </div>
+
+                <div class="tech-card">
+                    <h3>Error Logs</h3>
+                    <ul>
+                        <li><strong>File:</strong> logs/error-YYYY-MM-DD.log</li>
+                        <li><strong>Retention:</strong> 90 days</li>
+                        <li><strong>Max Size:</strong> 20MB per file</li>
+                        <li><strong>Format:</strong> JSON</li>
+                        <li><strong>Purpose:</strong> System errors and debugging</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="config-block">
+                <h4>Log Entry Structure</h4>
+                <pre><code>{
+  "level": "info|warn|error",
+  "message": "Human-readable message",
+  "timestamp": "YYYY-MM-DD HH:mm:ss",
+  "service": "db-client",
+  "user": "user@example.com",
+  "type": "ACTIVITY|SECURITY|COMPLIANCE",
+  "action": "ACTION_NAME",
+  "details": "Additional details",
+  "ip": "IP address",
+  "sessionId": "Session ID",
+  "dbType": "postgres|mysql|oracle"
+}</code></pre>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Comprehensive Logging Coverage</h2>
+
+            <div class="component">
+                <h3>Authentication & Session Management</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Type</th>
+                            <th>Data Captured</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>USER_LOGIN</td>
+                            <td>Security</td>
+                            <td>Email, IP, User Agent, Session ID</td>
+                        </tr>
+                        <tr>
+                            <td>SAML_AUTHENTICATION</td>
+                            <td>Security</td>
+                            <td>Email, IP, Success/Failure</td>
+                        </tr>
+                        <tr>
+                            <td>USER_LOGOUT</td>
+                            <td>Security</td>
+                            <td>Email, Session ID, IP</td>
+                        </tr>
+                        <tr>
+                            <td>SESSION_EXPIRED</td>
+                            <td>Activity</td>
+                            <td>Email, Session ID, Timeout Duration</td>
+                        </tr>
+                        <tr>
+                            <td>SESSION_TERMINATED</td>
+                            <td>Security</td>
+                            <td>Email, Old/New Session IDs</td>
+                        </tr>
+                        <tr>
+                            <td>UNAUTHORIZED_ACCESS_ATTEMPT</td>
+                            <td>Security</td>
+                            <td>IP, User Agent, Path, Method</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="component">
+                <h3>Database Operations</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Type</th>
+                            <th>Data Captured</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>DB_CONNECT</td>
+                            <td>Activity</td>
+                            <td>User, DB Type, Host, Port, Database</td>
+                        </tr>
+                        <tr>
+                            <td>DATABASE_ACCESS</td>
+                            <td>Security</td>
+                            <td>User, DB Type, Host, IP</td>
+                        </tr>
+                        <tr>
+                            <td>DATA_ACCESS_GRANTED</td>
+                            <td>Compliance</td>
+                            <td>User, DB Type, Database, DB User</td>
+                        </tr>
+                        <tr>
+                            <td>DB_CONNECTION_FAILED</td>
+                            <td>Security</td>
+                            <td>User, DB Type, Host, Error, IP</td>
+                        </tr>
+                        <tr>
+                            <td>DB_DISCONNECT</td>
+                            <td>Activity</td>
+                            <td>User, DB Type, Session ID</td>
+                        </tr>
+                        <tr>
+                            <td>DATA_ACCESS_REVOKED</td>
+                            <td>Compliance</td>
+                            <td>User, DB Type</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="component">
+                <h3>Query Execution</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Type</th>
+                            <th>Data Captured</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>QUERY_EXECUTE</td>
+                            <td>Activity</td>
+                            <td>User, Query Preview, DB Type, IP</td>
+                        </tr>
+                        <tr>
+                            <td>MUTATING_QUERY</td>
+                            <td>Security</td>
+                            <td>User, Query Preview, DB Type, IP</td>
+                        </tr>
+                        <tr>
+                            <td>DATA_MODIFICATION_ATTEMPT</td>
+                            <td>Compliance</td>
+                            <td>User, DB Type, Query Preview</td>
+                        </tr>
+                        <tr>
+                            <td>QUERY_FAILED</td>
+                            <td>Security</td>
+                            <td>User, Error, DB Type, IP</td>
+                        </tr>
+                        <tr>
+                            <td>RESULT_TRUNCATED</td>
+                            <td>Compliance</td>
+                            <td>User, Total Rows, Returned Rows</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="component">
+                <h3>Transaction Management</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Type</th>
+                            <th>Data Captured</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TRANSACTION_COMMIT</td>
+                            <td>Activity</td>
+                            <td>User, DB Type, IP</td>
+                        </tr>
+                        <tr>
+                            <td>DATA_MODIFICATION_COMMITTED</td>
+                            <td>Compliance</td>
+                            <td>User, DB Type</td>
+                        </tr>
+                        <tr>
+                            <td>TRANSACTION_ROLLBACK</td>
+                            <td>Activity</td>
+                            <td>User, DB Type, IP</td>
+                        </tr>
+                        <tr>
+                            <td>DATA_MODIFICATION_REVERTED</td>
+                            <td>Compliance</td>
+                            <td>User, DB Type</td>
+                        </tr>
+                        <tr>
+                            <td>AUTO_ROLLBACK</td>
+                            <td>Compliance</td>
+                            <td>User, DB Type, Reason</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Compliance Standards</h2>
+
+            <div class="component">
+                <h3>OWASP Top 10 (2021)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Risk</th>
+                            <th>Mitigation</th>
+                            <th>Implementation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A01 - Broken Access Control</td>
+                            <td>Session-based auth, single session enforcement</td>
+                            <td>✅ Implemented</td>
+                        </tr>
+                        <tr>
+                            <td>A02 - Cryptographic Failures</td>
+                            <td>Secure cookies, SAML encryption</td>
+                            <td>✅ Implemented</td>
+                        </tr>
+                        <tr>
+                            <td>A03 - Injection</td>
+                            <td>Parameterized queries, validation</td>
+                            <td>✅ Implemented</td>
+                        </tr>
+                        <tr>
+                            <td>A04 - Insecure Design</td>
+                            <td>Transaction management, confirmations</td>
+                            <td>✅ Implemented</td>
+                        </tr>
+                        <tr>
+                            <td>A05 - Security Misconfiguration</td>
+                            <td>Environment-based config, secure defaults</td>
+                            <td>✅ Implemented</td>
+                        </tr>
+                        <tr>
+                            <td>A07 - Authentication Failures</td>
+                            <td>SAML 2.0, session timeouts, logging</td>
+                            <td>✅ Implemented</td>
+                        </tr>
+                        <tr>
+                            <td>A08 - Data Integrity</td>
+                            <td>Transaction integrity, audit trail</td>
+                            <td>✅ Implemented</td>
+                        </tr>
+                        <tr>
+                            <td>A09 - Logging Failures</td>
+                            <td>Comprehensive logging, 365-day retention</td>
+                            <td>✅ Implemented</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="component">
+                <h3>HIPAA Compliance</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Requirement</th>
+                            <th>Standard</th>
+                            <th>Implementation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Access Control</td>
+                            <td>§164.312(a)(1)</td>
+                            <td>✅ Unique user ID, session management, access logging</td>
+                        </tr>
+                        <tr>
+                            <td>Audit Controls</td>
+                            <td>§164.312(b)</td>
+                            <td>✅ Complete audit trail, 365-day retention</td>
+                        </tr>
+                        <tr>
+                            <td>Integrity</td>
+                            <td>§164.312(c)(1)</td>
+                            <td>✅ Transaction management, modification tracking</td>
+                        </tr>
+                        <tr>
+                            <td>Authentication</td>
+                            <td>§164.312(d)</td>
+                            <td>✅ SAML 2.0, session validation</td>
+                        </tr>
+                        <tr>
+                            <td>Transmission Security</td>
+                            <td>§164.312(e)(1)</td>
+                            <td>✅ HTTPS support, secure cookies</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="component">
+                <h3>ISO 27001 Controls</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Control</th>
+                            <th>Description</th>
+                            <th>Implementation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A.9.2</td>
+                            <td>User Access Management</td>
+                            <td>✅ SAML authentication, access logging</td>
+                        </tr>
+                        <tr>
+                            <td>A.9.4</td>
+                            <td>System Access Control</td>
+                            <td>✅ Session timeout, access attempt logging</td>
+                        </tr>
+                        <tr>
+                            <td>A.12.4</td>
+                            <td>Logging and Monitoring</td>
+                            <td>✅ Event logging, timestamps, log protection</td>
+                        </tr>
+                        <tr>
+                            <td>A.12.7</td>
+                            <td>Information Systems Audit</td>
+                            <td>✅ Audit logging, 90-365 day retention</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="component">
+                <h3>SOC 2 Trust Principles</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Principle</th>
+                            <th>Criteria</th>
+                            <th>Implementation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Security</td>
+                            <td>CC6.1 - Logical Access</td>
+                            <td>✅ Authentication, authorization, access logging</td>
+                        </tr>
+                        <tr>
+                            <td>Security</td>
+                            <td>CC7.2 - System Monitoring</td>
+                            <td>✅ Activity monitoring, security event logging</td>
+                        </tr>
+                        <tr>
+                            <td>Security</td>
+                            <td>CC7.3 - Environmental Monitoring</td>
+                            <td>✅ System availability, error tracking</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="component">
+                <h3>RBI Guidelines</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Framework</th>
+                            <th>Requirement</th>
+                            <th>Implementation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cyber Security</td>
+                            <td>Comprehensive logging</td>
+                            <td>✅ All events logged with timestamps</td>
+                        </tr>
+                        <tr>
+                            <td>Cyber Security</td>
+                            <td>Incident detection</td>
+                            <td>✅ Unauthorized access logging</td>
+                        </tr>
+                        <tr>
+                            <td>IT Governance</td>
+                            <td>Audit trails</td>
+                            <td>✅ Complete activity tracking</td>
+                        </tr>
+                        <tr>
+                            <td>Data Security</td>
+                            <td>Access control</td>
+                            <td>✅ User credentials, no shared accounts</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Security Features</h2>
+
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3>Tamper-Evident Logs</h3>
+                    <ul>
+                        <li>JSON format with timestamps</li>
+                        <li>Immutable file-based storage</li>
+                        <li>Chronological ordering</li>
+                        <li>Integrity verification ready</li>
+                    </ul>
+                </div>
+
+                <div class="tech-card">
+                    <h3>Automatic Rotation</h3>
+                    <ul>
+                        <li>Daily file rotation</li>
+                        <li>20MB max file size</li>
+                        <li>Prevents disk space issues</li>
+                        <li>Configurable retention</li>
+                    </ul>
+                </div>
+
+                <div class="tech-card">
+                    <h3>Structured Data</h3>
+                    <ul>
+                        <li>JSON format for parsing</li>
+                        <li>Consistent schema</li>
+                        <li>Easy integration with SIEM</li>
+                        <li>Query-friendly structure</li>
+                    </ul>
+                </div>
+
+                <div class="tech-card">
+                    <h3>Privacy Protection</h3>
+                    <ul>
+                        <li>Passwords never logged</li>
+                        <li>Query preview (100 chars)</li>
+                        <li>PII handling compliant</li>
+                        <li>Secure storage</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Integration & Monitoring</h2>
+
+            <div class="config-block">
+                <h3>Compatible with Leading SIEM Tools</h3>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <h3>ELK Stack</h3>
+                        <ul>
+                            <li>Elasticsearch for indexing</li>
+                            <li>Logstash for processing</li>
+                            <li>Kibana for visualization</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h3>Splunk</h3>
+                        <ul>
+                            <li>Universal Forwarder</li>
+                            <li>JSON parsing</li>
+                            <li>Real-time monitoring</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h3>Cloud Services</h3>
+                        <ul>
+                            <li>AWS CloudWatch Logs</li>
+                            <li>Azure Monitor</li>
+                            <li>Google Cloud Logging</li>
+                        </ul>
+                    </div>
+
+                    <div class="tech-card">
+                        <h3>Open Source</h3>
+                        <ul>
+                            <li>Grafana Loki</li>
+                            <li>Graylog</li>
+                            <li>Datadog</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Production Deployment</h2>
+
+            <div class="config-block">
+                <h3>Recommended Setup</h3>
+                <ol>
+                    <li><strong>Log Aggregation:</strong> Configure ELK Stack or Splunk for centralized logging</li>
+                    <li><strong>Alerting:</strong> Set up alerts for security events (failed logins, unauthorized access)</li>
+                    <li><strong>Backup:</strong> Implement automated log backup to secure storage (S3, Azure Blob)</li>
+                    <li><strong>Monitoring:</strong> Create dashboards for real-time monitoring</li>
+                    <li><strong>Review Process:</strong> Establish regular log review procedures</li>
+                    <li><strong>Incident Response:</strong> Define incident response workflows based on logs</li>
+                    <li><strong>Compliance Reporting:</strong> Automate compliance report generation</li>
+                    <li><strong>Retention Policy:</strong> Implement automated archival after retention period</li>
+                </ol>
+            </div>
+
+            <div class="warning">
+                <strong>Important:</strong> Ensure log files are protected with appropriate file permissions (600 or 640) and stored on encrypted volumes in production environments.
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Compliance Reporting</h2>
+
+            <div class="component">
+                <h3>Available Reports</h3>
+                <ul>
+                    <li><strong>User Activity Report:</strong> All actions by user with timestamps</li>
+                    <li><strong>Data Access Report:</strong> Database connections and queries</li>
+                    <li><strong>Security Incident Report:</strong> Failed logins, unauthorized access</li>
+                    <li><strong>Transaction Audit:</strong> All data modifications with commit/rollback</li>
+                    <li><strong>Session Report:</strong> Login/logout times, session durations</li>
+                    <li><strong>Compliance Summary:</strong> Adherence to regulatory requirements</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <a href="configuration.html">← Previous: Configuration</a> | 
+        <a href="index.html">Home</a> | 
+        <a href="api.html">Next: API Reference →</a>
+    </footer>
+</body>
+</html>

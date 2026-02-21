@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture Overview - QueryForge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🏗️ Architecture Overview</h1>
+        <p>System Design and Component Structure</p>
+    </header>
+
+    <nav class="breadcrumb">
+        <a href="index.html">Home</a> → Architecture Overview
+    </nav>
+
+    <div class="container">
+        <section class="doc-section">
+            <h2>System Architecture</h2>
+            <div class="architecture-diagram">
+                <pre class="diagram">
+┌─────────────────────────────────────────────────────────────┐
+│                         CLIENT LAYER                         │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  React Frontend (Vite)                               │   │
+│  │  • Login Page with SAML redirect                     │   │
+│  │  • Connection Wizard                                 │   │
+│  │  • SQL Editor with syntax highlighting              │   │
+│  │  • Schema Browser (collapsible tree)                │   │
+│  │  • Data Viewer with pagination                      │   │
+│  │  • Export functionality (CSV/JSON/SQL/HTML/XML)     │   │
+│  │  • Dark/Light mode toggle                           │   │
+│  │  • Notification system                              │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                            ↕ HTTP/HTTPS
+┌─────────────────────────────────────────────────────────────┐
+│                      APPLICATION LAYER                       │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  Express.js Backend (Node.js)                        │   │
+│  │  • SAML 2.0 Authentication (@node-saml/passport-saml)│   │
+│  │  • Session Management (express-session)              │   │
+│  │  • Activity Monitoring                               │   │
+│  │  • Single Session Enforcement                        │   │
+│  │  • Database Connection Pool Management               │   │
+│  │  • Query Validation & Safety Checks                  │   │
+│  │  • Transaction Management                            │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                            ↕ Database Protocols
+┌─────────────────────────────────────────────────────────────┐
+│                       DATABASE LAYER                         │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │  PostgreSQL  │  │    MySQL     │  │    Oracle    │      │
+│  │   (pg lib)   │  │  (mysql2)    │  │ (oracledb)   │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+└─────────────────────────────────────────────────────────────┘
+                            ↕ SAML 2.0
+┌─────────────────────────────────────────────────────────────┐
+│                    IDENTITY PROVIDER                         │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  SAML Identity Provider                              │   │
+│  │  • User Authentication                               │   │
+│  │  • SAML Assertions                                   │   │
+│  │  • Single Sign-On                                    │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                </pre>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Component Breakdown</h2>
+            
+            <div class="component">
+                <h3>Frontend (React + Vite)</h3>
+                <h4>File Structure:</h4>
+                <pre><code>src/
+├── App.jsx          # Main application component
+├── App.css          # Styling with CSS variables for theming
+├── main.jsx         # React entry point
+index.html           # HTML template
+vite.config.js       # Vite configuration
+.env                 # Frontend environment variables</code></pre>
+                
+                <h4>Key Components:</h4>
+                <ul>
+                    <li><strong>LoginPage:</strong> SAML authentication initiation</li>
+                    <li><strong>ConnectionWizard:</strong> Database connection form</li>
+                    <li><strong>Toolbar:</strong> Navigation tabs and user menu</li>
+                    <li><strong>Sidebar:</strong> Schema browser with collapsible tree</li>
+                    <li><strong>SQLEditor:</strong> Query editor with execution controls</li>
+                    <li><strong>DataViewer:</strong> Table data display with pagination</li>
+                    <li><strong>PropertiesViewer:</strong> Table schema information</li>
+                    <li><strong>HistoryViewer:</strong> Query history display</li>
+                    <li><strong>Notification:</strong> Toast notifications</li>
+                    <li><strong>Modal:</strong> Confirmation dialogs</li>
+                </ul>
+            </div>
+
+            <div class="component">
+                <h3>Backend (Express.js)</h3>
+                <h4>File Structure:</h4>
+                <pre><code>server.js            # Express server with all routes
+.env.server          # Backend environment variables
+saml-config.json     # SAML IdP configuration
+package.json         # Dependencies</code></pre>
+                
+                <h4>Core Modules:</h4>
+                <ul>
+                    <li><strong>Authentication:</strong> SAML 2.0 with Passport.js</li>
+                    <li><strong>Session Management:</strong> In-memory sessions with timeouts</li>
+                    <li><strong>QueryForges:</strong> Connection pool per session</li>
+                    <li><strong>Query Execution:</strong> Validation and transaction handling</li>
+                    <li><strong>Schema Operations:</strong> Metadata retrieval</li>
+                    <li><strong>Export Functions:</strong> Data format conversion</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Data Flow</h2>
+            
+            <div class="flow">
+                <h3>1. Authentication Flow</h3>
+                <pre class="diagram">
+User → Login Page → SAML Redirect → Identity Provider
+                                           ↓
+                                    User Authenticates
+                                           ↓
+                                    SAML Assertion
+                                           ↓
+Backend ← SAML Callback ← Identity Provider
+   ↓
+Create Session
+   ↓
+Redirect to App → User Logged In
+                </pre>
+            </div>
+
+            <div class="flow">
+                <h3>2. Database Connection Flow</h3>
+                <pre class="diagram">
+User → Connection Form → Submit Credentials
+                              ↓
+                         Backend Validates
+                              ↓
+                    Create DB Client (pg/mysql2/oracledb)
+                              ↓
+                         Test Connection
+                              ↓
+                    Store in dbClients Map
+                              ↓
+                    Return Success → Frontend Updates State
+                </pre>
+            </div>
+
+            <div class="flow">
+                <h3>3. Query Execution Flow</h3>
+                <pre class="diagram">
+User → SQL Editor → Execute Query
+                         ↓
+                    Validate Query
+                         ↓
+                  Is Mutating? ──No──→ Execute Directly
+                         │                    ↓
+                        Yes              Return Results
+                         ↓
+                  Show Confirmation
+                         ↓
+                  User Confirms?
+                         ↓
+                   BEGIN Transaction
+                         ↓
+                   Execute Query
+                         ↓
+                Success? ──No──→ ROLLBACK
+                    │                ↓
+                   Yes          Show Error
+                    ↓
+              Return Results
+                    ↓
+           User COMMIT/ROLLBACK
+                </pre>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>State Management</h2>
+            
+            <div class="state-table">
+                <h3>Frontend State (React useState)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>State Variable</th>
+                            <th>Type</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>user</td>
+                            <td>Object</td>
+                            <td>Authenticated user information</td>
+                        </tr>
+                        <tr>
+                            <td>connected</td>
+                            <td>Boolean</td>
+                            <td>Database connection status</td>
+                        </tr>
+                        <tr>
+                            <td>view</td>
+                            <td>String</td>
+                            <td>Active tab (sql/data/properties/history)</td>
+                        </tr>
+                        <tr>
+                            <td>schema</td>
+                            <td>Array</td>
+                            <td>Database schema structure</td>
+                        </tr>
+                        <tr>
+                            <td>results</td>
+                            <td>Object</td>
+                            <td>Query execution results</td>
+                        </tr>
+                        <tr>
+                            <td>pendingTransaction</td>
+                            <td>Boolean</td>
+                            <td>Active transaction flag</td>
+                        </tr>
+                        <tr>
+                            <td>darkMode</td>
+                            <td>Boolean</td>
+                            <td>Theme preference (persisted)</td>
+                        </tr>
+                        <tr>
+                            <td>loading</td>
+                            <td>Boolean</td>
+                            <td>Loading state for operations</td>
+                        </tr>
+                        <tr>
+                            <td>notificationHistory</td>
+                            <td>Array</td>
+                            <td>Past notifications (last 20)</td>
+                        </tr>
+                        <tr>
+                            <td>abortController</td>
+                            <td>Object</td>
+                            <td>Query cancellation controller</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="state-table">
+                <h3>Backend State (In-Memory Maps)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Map Name</th>
+                            <th>Key</th>
+                            <th>Value</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>activeSessions</td>
+                            <td>email</td>
+                            <td>sessionID</td>
+                            <td>Single session enforcement</td>
+                        </tr>
+                        <tr>
+                            <td>dbClients</td>
+                            <td>sessionID</td>
+                            <td>{type, client/conn}</td>
+                            <td>Database connections</td>
+                        </tr>
+                        <tr>
+                            <td>sessionTimeouts</td>
+                            <td>sessionID</td>
+                            <td>timeoutID</td>
+                            <td>Inactivity timers</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Technology Stack</h2>
+            
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <h3>Frontend</h3>
+                    <ul>
+                        <li><strong>React 18:</strong> UI framework</li>
+                        <li><strong>Vite:</strong> Build tool and dev server</li>
+                        <li><strong>CSS Variables:</strong> Theming system</li>
+                        <li><strong>Fetch API:</strong> HTTP requests</li>
+                    </ul>
+                </div>
+
+                <div class="tech-card">
+                    <h3>Backend</h3>
+                    <ul>
+                        <li><strong>Node.js:</strong> Runtime environment</li>
+                        <li><strong>Express.js:</strong> Web framework</li>
+                        <li><strong>Passport.js:</strong> Authentication middleware</li>
+                        <li><strong>@node-saml/passport-saml:</strong> SAML strategy</li>
+                        <li><strong>express-session:</strong> Session management</li>
+                    </ul>
+                </div>
+
+                <div class="tech-card">
+                    <h3>Database Drivers</h3>
+                    <ul>
+                        <li><strong>pg:</strong> PostgreSQL client</li>
+                        <li><strong>mysql2:</strong> MySQL client</li>
+                        <li><strong>oracledb:</strong> Oracle client</li>
+                    </ul>
+                </div>
+
+                <div class="tech-card">
+                    <h3>Security</h3>
+                    <ul>
+                        <li><strong>SAML 2.0:</strong> Enterprise SSO</li>
+                        <li><strong>CORS:</strong> Cross-origin protection</li>
+                        <li><strong>Session Cookies:</strong> Secure authentication</li>
+                        <li><strong>Environment Variables:</strong> Secret management</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2>Design Patterns</h2>
+            
+            <div class="pattern">
+                <h3>1. Single Page Application (SPA)</h3>
+                <p>React-based SPA with client-side routing and state management.</p>
+            </div>
+
+            <div class="pattern">
+                <h3>2. RESTful API</h3>
+                <p>Backend exposes REST endpoints for all operations.</p>
+            </div>
+
+            <div class="pattern">
+                <h3>3. Session-Based Authentication</h3>
+                <p>Server-side sessions with SAML for enterprise SSO.</p>
+            </div>
+
+            <div class="pattern">
+                <h3>4. Connection Pooling</h3>
+                <p>One database connection per user session, stored in Map.</p>
+            </div>
+
+            <div class="pattern">
+                <h3>5. Optimistic UI Updates</h3>
+                <p>Immediate feedback with loading states and error handling.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <a href="index.html">← Back to Home</a> | 
+        <a href="configuration.html">Next: Configuration →</a>
+    </footer>
+</body>
+</html>
